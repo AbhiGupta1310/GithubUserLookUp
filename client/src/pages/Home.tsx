@@ -30,10 +30,11 @@ export default function Home() {
     enabled: !!username,
     retry: false,
     throwOnError: true,
-    onSuccess: () => {
-      setShowEasterEgg(true);
-      // Reset the animation after 2 seconds
-      setTimeout(() => setShowEasterEgg(false), 2000);
+    onSettled: (data) => {
+      if (data) {
+        setShowEasterEgg(true);
+        setTimeout(() => setShowEasterEgg(false), 2000);
+      }
     }
   });
 
@@ -52,7 +53,7 @@ export default function Home() {
                 scale: [1, 1.2, 1],
                 rotate: [0, 360],
                 transition: { duration: 1 }
-              } : {}}
+              } : undefined}
             >
               <SiGithub className="h-8 w-8" />
             </motion.div>
