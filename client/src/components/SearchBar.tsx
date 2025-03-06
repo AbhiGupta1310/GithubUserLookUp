@@ -38,7 +38,7 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3">
         <FormField
           control={form.control}
           name="username"
@@ -52,13 +52,17 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
                     field.onChange(e);
                     handleInputChange(e);
                   }}
-                  className="bg-white"
+                  className="bg-white shadow-sm hover:shadow transition-shadow duration-200 text-base py-6"
                 />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="px-6 py-6 shadow-sm hover:shadow transition-shadow duration-200"
+        >
           <Search className="h-4 w-4 mr-2" />
           Search
         </Button>

@@ -48,10 +48,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container max-w-3xl mx-auto py-8 px-4">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container max-w-3xl mx-auto py-12 px-4">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center justify-center gap-3 mb-6">
             <motion.div
               animate={showEasterEgg ? {
                 scale: [1, 1.2, 1],
@@ -59,14 +64,16 @@ export default function Home() {
                 transition: { duration: 1 }
               } : undefined}
             >
-              <SiGithub className="h-8 w-8" />
+              <SiGithub className="h-10 w-10 text-primary" />
             </motion.div>
-            <h1 className="text-3xl font-bold">GitHub User Finder</h1>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              GitHub User Finder
+            </h1>
           </div>
-          <p className="text-muted-foreground">
-            Search for GitHub users and view their profile information
+          <p className="text-lg text-muted-foreground">
+            Search for GitHub users and explore their profiles
           </p>
-        </div>
+        </motion.div>
 
         <div className="mb-8">
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
@@ -75,13 +82,20 @@ export default function Home() {
         {isLoading && <Loader />}
 
         {error && (
-          <ErrorMessage 
-            message={
-              error instanceof Error 
-                ? error.message 
-                : "An error occurred while fetching the user data"
-            }
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ErrorMessage 
+              message={
+                error instanceof Error 
+                  ? error.message 
+                  : "An error occurred while fetching the user data"
+              }
+            />
+          </motion.div>
         )}
 
         <AnimatePresence mode="wait">
