@@ -81,7 +81,7 @@ export default function Home() {
         )}
 
         <AnimatePresence mode="wait">
-          {user && !isLoading && !error && (
+          {user && !isLoading && !error && username && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
