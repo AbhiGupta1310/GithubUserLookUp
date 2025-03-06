@@ -31,11 +31,9 @@ export default function Home() {
     enabled: !!username,
     retry: false,
     throwOnError: true,
-    onSettled: (data) => {
-      if (data) {
-        setShowEasterEgg(true);
-        setTimeout(() => setShowEasterEgg(false), 2000);
-      }
+    onSuccess: () => {
+      setShowEasterEgg(true);
+      setTimeout(() => setShowEasterEgg(false), 2000);
     }
   });
 
