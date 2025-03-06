@@ -30,7 +30,7 @@ export default function Home() {
     queryKey: [`https://api.github.com/users/${username}`],
     enabled: !!username,
     retry: false,
-    throwOnError: true,
+    staleTime: Infinity,
     onSuccess: () => {
       setShowEasterEgg(true);
       setTimeout(() => setShowEasterEgg(false), 2000);
