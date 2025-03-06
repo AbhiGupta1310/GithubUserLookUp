@@ -6,12 +6,27 @@ import Loader from "@/components/Loader";
 import ErrorMessage from "@/components/ErrorMessage";
 import { SiGithub } from "react-icons/si";
 
+interface GitHubUser {
+  login: string;
+  name: string | null;
+  avatar_url: string;
+  bio: string | null;
+  public_repos: number;
+  followers: number;
+  following: number;
+  location: string | null;
+  company: string | null;
+  blog: string | null;
+  html_url: string;
+}
+
 export default function Home() {
   const [username, setUsername] = useState<string>("");
 
-  const { data: user, isLoading, error, refetch } = useQuery({
+  const { data: user, isLoading, error, refetch } = useQuery<GitHubUser>({
     queryKey: [`https://api.github.com/users/${username}`],
-    enabled: !!username
+    enabled: !!username,
+    retry: false
   });
 
   const handleSearch = async (searchUsername: string) => {
@@ -37,13 +52,13 @@ export default function Home() {
         </div>
 
         {isLoading && <Loader />}
-        
+
         {error && (
           <ErrorMessage 
             message={
               error instanceof Error 
                 ? error.message 
-                : "Failed to fetch user data"
+                : "An error occurred while fetching the user data"
             }
           />
         )}
