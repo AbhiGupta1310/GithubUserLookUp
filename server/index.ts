@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { VercelRequest, VercelResponse } from "@vercel/node"; // 👈 Import Vercel types
+import serverless from "serverless-http"; // 👈 Import serverless-http wrapper
 
 const app = express();
 app.use(express.json());
