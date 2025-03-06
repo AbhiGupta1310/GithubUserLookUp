@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import UserCard from "@/components/UserCard";
 import Loader from "@/components/Loader";
@@ -22,12 +23,18 @@ interface GitHubUser {
 
 export default function Home() {
   const [username, setUsername] = useState<string>("");
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
   const { data: user, isLoading, error, refetch } = useQuery<GitHubUser>({
     queryKey: [`https://api.github.com/users/${username}`],
     enabled: !!username,
     retry: false,
-    throwOnError: true
+    throwOnError: true,
+    onSuccess: () => {
+      setShowEasterEgg(true);
+      // Reset the animation after 2 seconds
+      setTimeout(() => setShowEasterEgg(false), 2000);
+    }
   });
 
   const handleSearch = async (searchUsername: string) => {
@@ -40,7 +47,15 @@ export default function Home() {
       <div className="container max-w-3xl mx-auto py-8 px-4">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <SiGithub className="h-8 w-8" />
+            <motion.div
+              animate={showEasterEgg ? {
+                scale: [1, 1.2, 1],
+                rotate: [0, 360],
+                transition: { duration: 1 }
+              } : {}}
+            >
+              <SiGithub className="h-8 w-8" />
+            </motion.div>
             <h1 className="text-3xl font-bold">GitHub User Finder</h1>
           </div>
           <p className="text-muted-foreground">
@@ -64,7 +79,18 @@ export default function Home() {
           />
         )}
 
-        {user && !isLoading && !error && <UserCard user={user} />}
+        <AnimatePresence mode="wait">
+          {user && !isLoading && !error && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <UserCard user={user} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
