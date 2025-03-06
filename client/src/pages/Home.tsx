@@ -26,7 +26,8 @@ export default function Home() {
   const { data: user, isLoading, error, refetch } = useQuery<GitHubUser>({
     queryKey: [`https://api.github.com/users/${username}`],
     enabled: !!username,
-    retry: false
+    retry: false,
+    throwOnError: true
   });
 
   const handleSearch = async (searchUsername: string) => {

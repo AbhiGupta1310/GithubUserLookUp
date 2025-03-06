@@ -2,8 +2,14 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
+    if (res.status === 404) {
+      throw new Error("User not found");
+    }
+    if (res.status === 403) {
+      throw new Error("API rate limit exceeded. Please try again later.");
+    }
+    const text = await res.text();
+    throw new Error(text || res.statusText);
   }
 }
 
@@ -29,9 +35,7 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey[0] as string, {
-      credentials: "include",
-    });
+    const res = await fetch(queryKey[0] as string);
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
       return null;
