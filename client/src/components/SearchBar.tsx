@@ -29,6 +29,13 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
     onSearch(data.username);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!value) {
+      onSearch(""); // Clear the search when input is empty
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
@@ -41,6 +48,10 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
                 <Input 
                   placeholder="Enter GitHub username..." 
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleInputChange(e);
+                  }}
                   className="bg-white"
                 />
               </FormControl>

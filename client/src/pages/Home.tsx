@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import SearchBar from "@/components/SearchBar";
 import UserCard from "@/components/UserCard";
@@ -24,6 +24,7 @@ interface GitHubUser {
 export default function Home() {
   const [username, setUsername] = useState<string>("");
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: user, isLoading, error, refetch } = useQuery<GitHubUser>({
     queryKey: [`https://api.github.com/users/${username}`],
@@ -40,6 +41,11 @@ export default function Home() {
 
   const handleSearch = async (searchUsername: string) => {
     setUsername(searchUsername);
+    if (!searchUsername) {
+      // Clear the query cache when search is empty
+      queryClient.removeQueries({ queryKey: [`https://api.github.com/users/${username}`] });
+      return;
+    }
     await refetch();
   };
 
